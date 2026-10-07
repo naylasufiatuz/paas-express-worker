@@ -1,5 +1,6 @@
 import { httpServerHandler } from "cloudflare:node";
 import express from "express";
+import { landingPage } from "./landing";
 
 const app = express();
 
@@ -57,30 +58,18 @@ app.get("/hello/:name", (req, res) => {
   });
 });
 
-// Pengayaan: response HTML sederhana (tema emerald)
+// Pengayaan: response HTML (landing page portofolio bertema emerald)
 app.get("/html", (req, res) => {
-  res.type("html").send(`<!doctype html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Express Worker</title>
-  <style>
-    body { margin:0; min-height:100vh; display:grid; place-items:center;
-           background:#022c22; color:#ecfdf5; font-family:system-ui,sans-serif; }
-    main { text-align:center; padding:24px; }
-    h1 { color:#10b981; }
-    a { color:#6ee7b7; }
-  </style>
-</head>
-<body>
-  <main>
-    <h1>Express berjalan di Cloudflare Workers</h1>
-    <p>Halaman ini dibuat oleh route Express, bukan file statis.</p>
-    <p><a href="/api/status">Lihat /api/status</a></p>
-  </main>
-</body>
-</html>`);
+  res.type("html").send(landingPage);
+});
+
+// Endpoint baru setelah deploy pertama (challenge redeploy)
+app.get("/api/about", (req, res) => {
+  res.json({
+    name: "Nayla Sufiatuz",
+    project: "paas-express-worker",
+    message: "Endpoint ini ditambahkan setelah deploy pertama"
+  });
 });
 
 app.listen(3000);
